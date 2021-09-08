@@ -1,9 +1,9 @@
 import React from 'react';
-import Login from './Login'
+import Auth from './views/Auth';
 
 const App = () => {
     return (
-      <Login />
+      <Auth />
     );
   };
   
