@@ -1,0 +1,24 @@
+@startuml
+title: Connect with database success and failure flow
+
+Client -> Backend: Requests to Connect with Database
+
+database ApplicationDB
+database StockDB
+
+activate Backend
+Backend -> StockDB: Requests the connection
+StockDB --> Backend: Connected
+Backend --> ApplicationDB: Save the connection
+
+Backend --> Client: Connected
+
+...
+
+Client -> Backend: Requests to Connect with Database
+Backend -> StockDB: Requests the connection
+
+StockDB --> Backend: Connection Failed
+Backend --> Client: Connection Failed
+deactivate Backend
+@enduml

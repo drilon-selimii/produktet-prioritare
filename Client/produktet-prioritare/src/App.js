@@ -1,10 +1,11 @@
 import React from 'react';
-import Login from './Login'
+import Auth from './views/Auth';
+import Header from './components/Header';
+import Tables from "./components/Tables";
 
 const App = () => {
     return (
-      <Login />
+      <Tables />
     );
   };
-  
   export default App;

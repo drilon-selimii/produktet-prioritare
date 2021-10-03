@@ -1,0 +1,14 @@
+@startuml
+title: Obtaining the sorted priority products
+
+Client -> Backend: Requests for the sorted priority \nproducts (based on last 7 or 30 days)
+
+activate Backend
+database ApplicationDB
+Backend -> ApplicationDB: Requests to get the data
+ApplicationDB --> Backend: Response with the data
+
+Backend --> Client: Response with the list of sorted\nproducts
+
+deactivate Backend
+@enduml
