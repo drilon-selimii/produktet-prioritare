@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using PriorityProducts.Services.Internal.Interfaces;
 
 namespace PriorityProducts.Controllers
 {
@@ -84,8 +85,8 @@ namespace PriorityProducts.Controllers
             catch (Exception)
             {
                 throw;
-            }
         }
+    }
 
         //[HttpPost]
         //[Route("sort")]
