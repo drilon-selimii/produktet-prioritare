@@ -16,12 +16,7 @@ namespace PriorityProducts.Services.External.Repositories
             _connection = connection;
         }
 
-        public Task<IEnumerable<T>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<T>> GetAllProductsAsync()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
             IEnumerable<T> items = await _connection.Connection.GetAllAsync<T>();
 

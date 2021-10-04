@@ -4,10 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Priority.Products.Models;
+using PriorityProducts.Models;
 using PriorityProducts.Services.External;
 using PriorityProducts.Services.External.Interfaces;
 using PriorityProducts.Services.External.Repositories;
+using PriorityProducts.Services.Internal.Interfaces;
+using PriorityProducts.Services.Internal.Repositories;
 
 namespace PriorityProducts
 {
@@ -25,9 +27,9 @@ namespace PriorityProducts
             services.AddLogging();
 
             services.AddSingleton<IConfiguration>(Configuration);
-
+            services.AddScoped<IManipulation, Manipulation>();
             services.AddScoped<IProductRepository, ProductRepository>();
-
+            services.AddScoped<ISalesRepository, SalesRepository>();
             services.AddSingleton<IDatabaseConnection, DatabaseConnection>();
 
             services.AddCors(options =>

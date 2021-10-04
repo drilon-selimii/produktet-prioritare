@@ -7,7 +7,6 @@ namespace PriorityProducts.Models.Entities.External
     [Table("Stock_Table")]
     public class Products : EntityBase
     {
-        [Key]
         public string Product_Id { get; }
         public string Product_Name { get; }
         public string Product_Description { get; }

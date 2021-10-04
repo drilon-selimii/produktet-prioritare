@@ -1,13 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Priority.Products.Models.Entities.Internal
+namespace PriorityProducts.Models.Entities.Internal
 {
     public class ThirtyDays
     {
         [Key]
         [Required]
-        public int Product_Id { get; set; }
+        public string Product_Id { get; set; }
 
         [Required]
         [MaxLength(50)]
@@ -24,10 +25,12 @@ namespace Priority.Products.Models.Entities.Internal
         public int Sales_Amount { get; set; }
 
         [Required]
+        [Column(TypeName = "decimal(12,4)")]
         [GreaterThanZero(ErrorMessage = "Product price can't be negative.")]
         public decimal Product_Price { get; set; }
 
         [Required]
+        [Column(TypeName = "decimal(12,4)")]
         public decimal Coefficient { get; set; }
     }
 }

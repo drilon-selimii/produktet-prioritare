@@ -6,6 +6,6 @@ namespace PriorityProducts.Services.External.Interfaces
 {
     public interface IBaseRepository<T> where T : EntityBase
     {
-        Task<IEnumerable<T>> GetAllProductsAsync();
+        Task<IEnumerable<T>> GetAllAsync();
     }
 }

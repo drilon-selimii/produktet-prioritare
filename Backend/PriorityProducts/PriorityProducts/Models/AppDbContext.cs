@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Priority.Products.Models.Entities.Internal;
+using PriorityProducts.Models.Entities.Internal;
 
-namespace Priority.Products.Models
+namespace PriorityProducts.Models
 {
     public class AppDbContext : DbContext
     {
