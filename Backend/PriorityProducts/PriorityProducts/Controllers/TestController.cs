@@ -8,6 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using PriorityProducts.Services.Internal.Interfaces;
+using PriorityProducts.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace PriorityProducts.Controllers
 {
@@ -60,13 +62,35 @@ namespace PriorityProducts.Controllers
 
                 var products = await _productRepository.GetAllAsync();
 
+                var productIds = await _manipulation.GetAllProductsIds().ToListAsync();
+
                 var productSales = await _salesRepository.GetAllAsync();
 
                 foreach (var product in products)
                 {
                     var salesAmount = productSales.Where(p => p.Product_Id == product.Product_Id).Sum(q => q.Quantity);
 
-                    var priorityProducts = new SevenDays
+                    if (productIds.Any(p => p.Product_Id == product.Product_Id))
+                    {
+                        // TODO: Check the update method...
+                        var priorityProductsToUpdate = new SevenDays
+                        {
+                            Product_Id =  product.Product_Id,
+                            Product_Name = product.Product_Name,
+                            Last_Update = product.Last_Update,
+                            Remaining_Quantity = product.Remaining_Quantity,
+                            Product_Price = product.Product_Price,
+                            Sales_Amount = salesAmount,
+                            Coefficient = product.Remaining_Quantity == 0 ? salesAmount :
+                        (decimal)salesAmount / product.Remaining_Quantity
+                        };
+
+                        _manipulation.Update(priorityProductsToUpdate);
+                        await _manipulation.SaveChangesAsync();
+
+                    }
+
+                    var priorityProductsToInsert = new SevenDays
                     {
                         Product_Id = product.Product_Id,
                         Product_Name = product.Product_Name,
@@ -78,7 +102,7 @@ namespace PriorityProducts.Controllers
                         (decimal)salesAmount / product.Remaining_Quantity
                     };
 
-                    _manipulation.Add(priorityProducts);
+                    _manipulation.Add(priorityProductsToInsert);
                     await _manipulation.SaveChangesAsync();
         }
     }
@@ -94,9 +118,9 @@ namespace PriorityProducts.Controllers
         {
             try
             {
-                var unSortedProducts = _manipulation.GetAll7ProductsAsync().ToList();
+                var unSortedProducts = await _manipulation.GetAllProducts<SevenDays>().ToListAsync();                
 
-                var sorted = QuickSort(unSortedProducts);
+                var sorted = SortingAlgorithms.SevenDaysQuickSort(unSortedProducts);
 
                 return Ok(sorted);
             }
@@ -104,36 +128,6 @@ namespace PriorityProducts.Controllers
             {
                 return Ok(ex);
             }
-        }
-
-        public static List<SevenDays> QuickSort(List<SevenDays> lst)
-        {
-            if (lst.Count <= 1)
-                return lst;
-            int pivotIndex = lst.Count / 2;
-            var pivot = lst.ElementAt(pivotIndex);
-            decimal pivotCoefficient = lst.ElementAt(pivotIndex).Coefficient;
-            List<SevenDays> left = new List<SevenDays>();
-            List<SevenDays> right = new List<SevenDays>();
-
-            for (int i = 0; i < lst.Count; i++)
-            {
-                if (i == pivotIndex) continue;
-
-                if (lst.ElementAt(i).Coefficient >= pivotCoefficient)
-                {
-                    left.Add(lst.ElementAt(i));
-                }
-                else
-                {
-                    right.Add(lst.ElementAt(i));
-                }
-            }
-
-            List<SevenDays> sorted = QuickSort(left);
-            sorted.Add(pivot);
-            sorted.AddRange(QuickSort(right));
-            return sorted;
-        }
+        }       
     }
 }

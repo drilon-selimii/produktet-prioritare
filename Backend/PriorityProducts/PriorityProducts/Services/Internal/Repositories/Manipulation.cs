@@ -1,8 +1,6 @@
 ﻿using PriorityProducts.Models;
 using PriorityProducts.Models.Entities.Internal;
 using PriorityProducts.Services.Internal.Interfaces;
-using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,14 +20,23 @@ namespace PriorityProducts.Services.Internal.Repositories
             _context.Add(entity);
         }
 
+        public void Update<T>(T entity) where T : class
+        {
+            _context.Attach(entity);
+        }
+
         public async Task<bool> SaveChangesAsync()
         {
             return (await _context.SaveChangesAsync()) > 0;
         }
 
-        public IQueryable<SevenDays> GetAll7ProductsAsync()
+        public IQueryable<T> GetAllProducts<T>() where T : class
         {
-            return  _context.Set<SevenDays>();
-        }        
+            return _context.Set<T>();
+        }
+        public IQueryable<ProductIds> GetAllProductsIds()
+        {
+            return _context.Set<SevenDays>().Select(p => new ProductIds { Product_Id = p.Product_Id });
+        }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using PriorityProducts.Models.Entities.Internal;
-using System;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,8 +9,12 @@ namespace PriorityProducts.Services.Internal.Interfaces
     {
         void Add<T>(T entity) where T : class;
 
+        void Update<T>(T entity) where T : class;
+
         Task<bool> SaveChangesAsync();
 
-        IQueryable<SevenDays> GetAll7ProductsAsync();
+        IQueryable<T> GetAllProducts<T>() where T : class;
+
+        IQueryable<ProductIds> GetAllProductsIds();
     }
 }
