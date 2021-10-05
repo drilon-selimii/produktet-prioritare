@@ -88,45 +88,52 @@ namespace PriorityProducts.Controllers
         }
     }
 
-        //[HttpPost]
-        //[Route("sort")]
-        //public async Task<ActionResult> GetSortedListAsync()
-        //{
-        //    try
-        //    {
-        //        var unSortedProducts = _manipulation.GetAll7ProductsAsync().ToList();
-        //        static List<SevenDays> Quicksort(List<SevenDays> unsorted)
-        //        {
-        //            if (unSortedProducts.Count() <= 1)
-        //            {
-        //                sortedProducts = unSortedProducts;
-        //            }
-        //            else
-        //            {
-        //                int pivotPosition = unSortedProducts.Count() / 2;
-        //                decimal pivotValue = unSortedProducts.ElementAt(pivotPosition).Coefficient;
-        //                unSortedProducts.RemoveAt(pivotPosition);
-        //                List<SevenDays> smaller = new List<SevenDays>();
-        //                List<SevenDays> greater = new List<SevenDays();
-        //                foreach (var item in unSortedProducts)
-        //                {
-        //                    if (item.Coefficient < pivotValue)
-        //                    {
-        //                        smaller.Add(item);
-        //                    }
-        //                    else
-        //                    {
-        //                        greater.Add(item);
-        //                    }
-        //                }
-        //            } }
+        [HttpPost]
+        [Route("sort")]
+        public async Task<ActionResult> GetSortedListAsync()
+        {
+            try
+            {
+                var unSortedProducts = _manipulation.GetAll7ProductsAsync().ToList();
 
-        //        return Ok(unSortedProducts);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Ok(ex);
-        //    }            
-        //}
+                var sorted = QuickSort(unSortedProducts);
+
+                return Ok(sorted);
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex);
+            }
+        }
+
+        public static List<SevenDays> QuickSort(List<SevenDays> lst)
+        {
+            if (lst.Count <= 1)
+                return lst;
+            int pivotIndex = lst.Count / 2;
+            var pivot = lst.ElementAt(pivotIndex);
+            decimal pivotCoefficient = lst.ElementAt(pivotIndex).Coefficient;
+            List<SevenDays> left = new List<SevenDays>();
+            List<SevenDays> right = new List<SevenDays>();
+
+            for (int i = 0; i < lst.Count; i++)
+            {
+                if (i == pivotIndex) continue;
+
+                if (lst.ElementAt(i).Coefficient >= pivotCoefficient)
+                {
+                    left.Add(lst.ElementAt(i));
+                }
+                else
+                {
+                    right.Add(lst.ElementAt(i));
+                }
+            }
+
+            List<SevenDays> sorted = QuickSort(left);
+            sorted.Add(pivot);
+            sorted.AddRange(QuickSort(right));
+            return sorted;
+        }
     }
 }

@@ -71,3 +71,4 @@ C:\Users\Lenovo\Desktop\Dizajnimi i aplikacionit per sortimin e produkteve prior
 C:\Users\Lenovo\Desktop\Dizajnimi i aplikacionit per sortimin e produkteve prioritare\Backend\PriorityProducts\PriorityProducts\obj\Debug\net5.0\ref\PriorityProducts.dll
 C:\Users\Lenovo\Desktop\Dizajnimi i aplikacionit per sortimin e produkteve prioritare\Backend\PriorityProducts\PriorityProducts\obj\Debug\net5.0\PriorityProducts.pdb
 C:\Users\Lenovo\Desktop\Dizajnimi i aplikacionit per sortimin e produkteve prioritare\Backend\PriorityProducts\PriorityProducts\obj\Debug\net5.0\PriorityProducts.genruntimeconfig.cache
+C:\Users\Lenovo\Desktop\Dizajnimi i aplikacionit per sortimin e produkteve prioritare\Backend\PriorityProducts\PriorityProducts\obj\Debug\net5.0\PriorityProducts.csprojAssemblyReference.cache
