@@ -66,16 +66,18 @@ namespace PriorityProducts.Controllers
 
                 var productSales = await _salesRepository.GetAllAsync();
 
+                productSales = productSales.Where(d => d.Date >= dateBefore && d.Date <= dateNow);
+
                 foreach (var product in products)
                 {
-                    var salesAmount = productSales.Where(p => p.Product_Id == product.Product_Id).Sum(q => q.Quantity);
+                    var salesAmount = productSales != null ? productSales.Where(p => p.Product_Id == product.Product_Id).Sum(q => q.Quantity) : 0;
 
                     if (productIds.Any(p => p.Product_Id == product.Product_Id))
                     {
                         // TODO: Check the update method...
                         var priorityProductsToUpdate = new SevenDays
                         {
-                            Product_Id =  product.Product_Id,
+                            Product_Id = product.Product_Id,
                             Product_Name = product.Product_Name,
                             Last_Update = product.Last_Update,
                             Remaining_Quantity = product.Remaining_Quantity,
@@ -90,27 +92,30 @@ namespace PriorityProducts.Controllers
 
                     }
 
-                    var priorityProductsToInsert = new SevenDays
+                    else
                     {
-                        Product_Id = product.Product_Id,
-                        Product_Name = product.Product_Name,
-                        Last_Update = product.Last_Update,
-                        Remaining_Quantity = product.Remaining_Quantity,
-                        Product_Price = product.Product_Price,
-                        Sales_Amount = salesAmount,
-                        Coefficient = product.Remaining_Quantity == 0 ? salesAmount :
-                        (decimal)salesAmount / product.Remaining_Quantity
-                    };
+                        var priorityProductsToInsert = new SevenDays
+                        {
+                            Product_Id = product.Product_Id,
+                            Product_Name = product.Product_Name,
+                            Last_Update = product.Last_Update,
+                            Remaining_Quantity = product.Remaining_Quantity,
+                            Product_Price = product.Product_Price,
+                            Sales_Amount = salesAmount,
+                            Coefficient = product.Remaining_Quantity == 0 ? salesAmount :
+                            (decimal)salesAmount / product.Remaining_Quantity
+                        };
 
-                    _manipulation.Add(priorityProductsToInsert);
-                    await _manipulation.SaveChangesAsync();
-        }
-    }
-            catch (Exception)
+                        _manipulation.Add(priorityProductsToInsert);
+                        await _manipulation.SaveChangesAsync();
+                    }
+                }
+            }
+            catch (Exception ex)
             {
                 throw;
+            }
         }
-    }
 
         [HttpPost]
         [Route("sort")]
@@ -118,7 +123,7 @@ namespace PriorityProducts.Controllers
         {
             try
             {
-                var unSortedProducts = await _manipulation.GetAllProducts<SevenDays>().ToListAsync();                
+                var unSortedProducts = await _manipulation.GetAllProducts<SevenDays>().ToListAsync();
 
                 var sorted = SortingAlgorithms.SevenDaysQuickSort(unSortedProducts);
 
@@ -128,6 +133,6 @@ namespace PriorityProducts.Controllers
             {
                 return Ok(ex);
             }
-        }       
+        }
     }
 }
