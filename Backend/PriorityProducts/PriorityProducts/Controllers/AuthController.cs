@@ -4,9 +4,9 @@ namespace Priority.Products.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AuthenticationController : Controller
+    public class AuthController : Controller
     {
-        public AuthenticationController()
+        public AuthController()
         {
 
         }

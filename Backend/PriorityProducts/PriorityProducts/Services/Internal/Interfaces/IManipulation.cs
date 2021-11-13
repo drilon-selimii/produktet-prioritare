@@ -15,6 +15,7 @@ namespace PriorityProducts.Services.Internal.Interfaces
 
         IQueryable<T> GetAllProducts<T>() where T : class;
 
-        IQueryable<ProductIds> GetAllProductsIds();
+        IQueryable<ProductIds> GetAllProductsIdsFromLastWeek();
+        IQueryable<ProductIds> GetAllProductsIdsFromLastMonth();
     }
 }

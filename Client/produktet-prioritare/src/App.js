@@ -1,11 +1,13 @@
-import React from 'react';
-import Auth from './views/Auth';
-import Header from './components/Header';
-import Tables from "./components/Tables";
+import React from "react";
+import Auth from "./views/Auth";
+import Home from "./views/Home";
+import { HashRouter as Router, Route } from "react-router-dom";
 
 const App = () => {
-    return (
-      <Tables />
-    );
-  };
-  export default App;
+  return (
+      <div>
+        <Home />
+      </div>
+  );
+};
+export default App;

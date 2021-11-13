@@ -1,16 +1,22 @@
 import React from "react";
 
-import { makeStyles, useTheme, Box, Container, Grid } from "@material-ui/core";
-import { ArrowDownward, ArrowUpward, GroupAdd, InsertChartOutlined, PieChart} from "@material-ui/icons";
+import { makeStyles, Box, Container, Grid, Tabs, Tab, Typography } from "@material-ui/core";
+import { ArrowDownward, ArrowUpward, TrendingUp, InsertChartOutlined, PieChart} from "@material-ui/icons";
 // core components
 import CardStats from "./Cards/CardStats.js";
 import componentStyles from "../assets/theme/components/header.js";
 import theme from "../assets/theme/theme.js";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(componentStyles);
 
 const Header = () => {
   const classes = useStyles();
+  const [value, setValue] = React.useState('one');
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   return (
     <>
       <div className={classes.header}>
@@ -23,8 +29,8 @@ const Header = () => {
             <Grid container>
               <Grid item xl={2} lg={4} xs={12}>
                 <CardStats
-                  subtitle="Traffic"
-                  title="35,897"
+                  subtitle="Best Selling"
+                  title="102"
                   icon={InsertChartOutlined}
                   color="bgError"
                   footer={
@@ -53,8 +59,8 @@ const Header = () => {
               </Grid>
               <Grid item xl={2} lg={4} xs={12}>
                 <CardStats
-                  subtitle="New users"
-                  title="2,356"
+                  subtitle="Newest Product"
+                  title="17"
                   icon={PieChart}
                   color="bgWarning"
                   footer={
@@ -83,9 +89,9 @@ const Header = () => {
               </Grid>
               <Grid item xl={2} lg={4} xs={12}>
                 <CardStats
-                  subtitle="Sales"
-                  title="924"
-                  icon={GroupAdd}
+                  subtitle="Total Sales"
+                  title="218"
+                  icon={TrendingUp}
                   color="bgWarningLight"
                   footer={
                     <>

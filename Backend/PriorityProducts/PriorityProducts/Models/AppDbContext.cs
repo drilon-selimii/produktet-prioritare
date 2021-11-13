@@ -9,5 +9,11 @@ namespace PriorityProducts.Models
         { }
         public DbSet<SevenDays> SevenDays { get; set; }
         public DbSet<ThirtyDays> ThirtyDays { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<DatabaseConnection>()
+                .HasKey(c => new { c.Host, c.Database });
+        }
     }
 }
