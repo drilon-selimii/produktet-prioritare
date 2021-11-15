@@ -12,7 +12,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import axios from 'axios'
+import axios from "axios";
 
 import componentStyles from "../assets/theme/components/tables.js";
 
@@ -23,12 +23,11 @@ const LeastSold = () => {
   const [repo, setRepo] = useState([]);
 
   const getRepo = () => {
-    axios.post("https://localhost:5001/test/sort")
-  .then((response) => {
-    const myRepo = response.data;
-    setRepo(myRepo);
-  });
-};
+    axios.post("https://localhost:5001/test/sort").then((response) => {
+      const myRepo = response.data;
+      setRepo(myRepo);
+    });
+  };
 
   useEffect(() => getRepo(), []);
 
@@ -42,11 +41,11 @@ const LeastSold = () => {
         <Card classes={{ root: classes.cardRoot }}>
           <CardHeader
             className={classes.cardHeader}
-            title="Sorted Products"
+            title="Products that might have a discount"
             titleTypographyProps={{
               component: Box,
               marginBottom: "0!important",
-              variant: "h3",
+              variant: "h4",
             }}
           ></CardHeader>
           <TableContainer>
@@ -57,6 +56,14 @@ const LeastSold = () => {
             >
               <TableHead>
                 <TableRow>
+                  <TableCell
+                    classes={{
+                      root:
+                        classes.tableCellRoot + " " + classes.tableCellRootHead,
+                    }}
+                  >
+                    No.
+                  </TableCell>
                   <TableCell
                     classes={{
                       root:
@@ -116,33 +123,36 @@ const LeastSold = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-              {repo.map((data, key) => {
-            return (
-                <TableRow key={key}>
-                <TableCell classes={{ root: classes.tableCellRoot }}>
-                    {data.product_Name}
-                  </TableCell>
-                  <TableCell classes={{ root: classes.tableCellRoot }}>
-                    {data.product_Id}
-                  </TableCell>
-                  <TableCell classes={{ root: classes.tableCellRoot }}>
-                  {data.last_Update}
-                  </TableCell>
-                  <TableCell classes={{ root: classes.tableCellRoot }}>
-                  {data.product_Price} €
-                  </TableCell>
-                  <TableCell classes={{ root: classes.tableCellRoot }}>
-                    {data.remaining_Quantity}
-                  </TableCell>
-                  <TableCell classes={{ root: classes.tableCellRoot }}>
-                    {data.sales_Amount}
-                  </TableCell>
-                  <TableCell classes={{ root: classes.tableCellRoot }}>
-                    {data.coefficient}
-                  </TableCell>              
-                </TableRow>
-                );
-              })}
+                {repo.map((data, key) => {
+                  return (
+                    <TableRow key={key}>
+                      <TableCell classes={{ root: classes.tableCellRoot }}>
+                        {key + 1}
+                      </TableCell>
+                      <TableCell classes={{ root: classes.tableCellRoot }}>
+                        {data.product_Name}
+                      </TableCell>
+                      <TableCell classes={{ root: classes.tableCellRoot }}>
+                        {data.product_Id}
+                      </TableCell>
+                      <TableCell classes={{ root: classes.tableCellRoot }}>
+                        {data.last_Update}
+                      </TableCell>
+                      <TableCell classes={{ root: classes.tableCellRoot }}>
+                        {data.product_Price} €
+                      </TableCell>
+                      <TableCell classes={{ root: classes.tableCellRoot }}>
+                        {data.remaining_Quantity}
+                      </TableCell>
+                      <TableCell classes={{ root: classes.tableCellRoot }}>
+                        {data.sales_Amount}
+                      </TableCell>
+                      <TableCell classes={{ root: classes.tableCellRoot }}>
+                        {data.coefficient}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Box>
           </TableContainer>

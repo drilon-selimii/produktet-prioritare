@@ -14,6 +14,7 @@ namespace PriorityProducts.Services.Internal.Interfaces
         Task<bool> SaveChangesAsync();
 
         IQueryable<T> GetAllProducts<T>() where T : class;
+        IQueryable<T> GetAllConnections<T>() where T : class;
 
         IQueryable<ProductIds> GetAllProductsIdsFromLastWeek();
         IQueryable<ProductIds> GetAllProductsIdsFromLastMonth();

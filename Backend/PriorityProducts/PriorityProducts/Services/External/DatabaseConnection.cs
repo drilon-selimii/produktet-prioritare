@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using PriorityProducts.Services.Internal.Interfaces;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace PriorityProducts.Services.External
 {
@@ -8,9 +9,21 @@ namespace PriorityProducts.Services.External
     {
         public IDbConnection Connection { get; }
 
-        public DatabaseConnection(IConfiguration configuration)
+        private readonly IManipulation _manipulation;
+
+        public DatabaseConnection(IManipulation manipulation)
         {
-            string dbPath = configuration.GetConnectionString("StockDbConnection");
+            _manipulation = manipulation;
+
+            var path = _manipulation.GetAllConnections<Models.Entities.Internal.DatabaseConnection>()
+                .OrderByDescending(x => x.Database).LastOrDefault();
+
+            string server = path.Host,
+                database = path.Database,
+                username = path.User,
+                password = path.Password;
+
+            string dbPath = $"Server={server};Database={database};Uid={username};Pwd={password}";
 
             Connection = new SqlConnection(dbPath);
         }

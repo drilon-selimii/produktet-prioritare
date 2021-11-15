@@ -6,7 +6,6 @@ import { ArrowDownward, ArrowUpward, TrendingUp, InsertChartOutlined, PieChart} 
 import CardStats from "./Cards/CardStats.js";
 import componentStyles from "../assets/theme/components/header.js";
 import theme from "../assets/theme/theme.js";
-import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(componentStyles);
 

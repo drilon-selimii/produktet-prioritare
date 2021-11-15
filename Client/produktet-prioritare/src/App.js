@@ -1,13 +1,27 @@
-import React from "react";
+import React, {
+  useState,
+  useEffect
+} from "react";
+import axios from "axios";
 import Auth from "./views/Auth";
 import Home from "./views/Home";
-import { HashRouter as Router, Route } from "react-router-dom";
 
 const App = () => {
-  return (
-      <div>
-        <Home />
-      </div>
-  );
-};
-export default App;
+    const [isConnected, setIsConnected] = useState(false);
+
+    const checkConnection = () => {
+      axios.post("https://localhost:5001/auth/check-connection").then((response) => {
+        console.log(response.data)
+        if (response.data)
+          setIsConnected(true);
+      });
+    };
+
+    useEffect(() => checkConnection(), []);
+
+    return ( 
+      <div > {
+        isConnected === true ? < Home /> : < Auth />
+      } </div>);
+    };
+    export default App;

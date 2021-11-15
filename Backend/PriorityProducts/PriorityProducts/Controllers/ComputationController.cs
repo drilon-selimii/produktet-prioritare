@@ -52,7 +52,6 @@ namespace PriorityProducts.Controllers
 
                     if (productIds.Any(p => p.Product_Id == product.Product_Id))
                     {
-                        // TODO: Check the update method...
                         var priorityProductsToUpdate = new SevenDays
                         {
                             Product_Id = product.Product_Id,
@@ -67,7 +66,6 @@ namespace PriorityProducts.Controllers
 
                         _manipulation.Update(priorityProductsToUpdate);
                         await _manipulation.SaveChangesAsync();
-
                     }
 
                     else
@@ -118,7 +116,6 @@ namespace PriorityProducts.Controllers
 
                     if (productIds.Any(p => p.Product_Id == product.Product_Id))
                     {
-                        // TODO: Check the update method...
                         var priorityProductsToUpdate = new ThirtyDays
                         {
                             Product_Id = product.Product_Id,
@@ -133,7 +130,6 @@ namespace PriorityProducts.Controllers
 
                         _manipulation.Update(priorityProductsToUpdate);
                         await _manipulation.SaveChangesAsync();
-
                     }
 
                     else

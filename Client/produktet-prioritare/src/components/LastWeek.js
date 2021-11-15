@@ -23,7 +23,9 @@ const LastWeek = () => {
   const [repo, setRepo] = useState([]);
 
   const getRepo = () => {
-    axios.post("https://localhost:5001/computation/save-last-week-priority-products");
+    axios.post(
+      "https://localhost:5001/computation/save-last-week-priority-products"
+    );
     axios
       .post("https://localhost:5001/service/get-sorted-last-week")
       .then((response) => {
@@ -44,11 +46,11 @@ const LastWeek = () => {
         <Card classes={{ root: classes.cardRoot }}>
           <CardHeader
             className={classes.cardHeader}
-            title="Sorted Products"
+            title="Sorted priority products based on last week sales"
             titleTypographyProps={{
               component: Box,
               marginBottom: "0!important",
-              variant: "h3",
+              variant: "h4",
             }}
           ></CardHeader>
           <TableContainer>
@@ -59,6 +61,14 @@ const LastWeek = () => {
             >
               <TableHead>
                 <TableRow>
+                  <TableCell
+                    classes={{
+                      root:
+                        classes.tableCellRoot + " " + classes.tableCellRootHead,
+                    }}
+                  >
+                    No.
+                  </TableCell>
                   <TableCell
                     classes={{
                       root:
@@ -121,6 +131,9 @@ const LastWeek = () => {
                 {repo.map((data, key) => {
                   return (
                     <TableRow key={key}>
+                      <TableCell classes={{ root: classes.tableCellRoot }}>
+                        {key + 1}
+                      </TableCell>
                       <TableCell classes={{ root: classes.tableCellRoot }}>
                         {data.product_Name}
                       </TableCell>

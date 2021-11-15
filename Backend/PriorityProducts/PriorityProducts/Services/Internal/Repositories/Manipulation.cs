@@ -34,10 +34,17 @@ namespace PriorityProducts.Services.Internal.Repositories
         {
             return _context.Set<T>();
         }
+
+        public IQueryable<T> GetAllConnections<T>() where T : class
+        {
+            return _context.Set<T>();
+        }
+
         public IQueryable<ProductIds> GetAllProductsIdsFromLastWeek()
         {
             return _context.Set<SevenDays>().Select(p => new ProductIds { Product_Id = p.Product_Id });
         }
+
         public IQueryable<ProductIds> GetAllProductsIdsFromLastMonth()
         {
             return _context.Set<ThirtyDays>().Select(p => new ProductIds { Product_Id = p.Product_Id });
