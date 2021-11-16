@@ -23,7 +23,7 @@ namespace PriorityProducts.Services.External
                 username = path.User,
                 password = path.Password;
 
-            string dbPath = $"Server={server};Database={database};Uid={username};Pwd={password}";
+            string dbPath = $"Server={server};Database={database};Uid={username};Pwd={password};MultipleActiveResultSets=True";
 
             Connection = new SqlConnection(dbPath);
         }

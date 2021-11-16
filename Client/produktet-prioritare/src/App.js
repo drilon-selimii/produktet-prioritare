@@ -11,7 +11,6 @@ const App = () => {
 
     const checkConnection = () => {
       axios.post("https://localhost:5001/auth/check-connection").then((response) => {
-        console.log(response.data)
         if (response.data)
           setIsConnected(true);
       });

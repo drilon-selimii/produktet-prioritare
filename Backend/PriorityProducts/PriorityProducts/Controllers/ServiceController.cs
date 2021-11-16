@@ -82,22 +82,22 @@ namespace PriorityProducts.Controllers
                 var productSales = sales.Where(d => d.Date >= dateBefore && d.Date <= dateNow);
                 var lastProductSales = sales.Where(d => d.Date >= twoMonthsBefore && d.Date < dateBefore);
 
-                List<BestSelling> productsSales = new List<BestSelling>(),
-                    lastProductsSales = new List<BestSelling>();
+                List<CardStats> productsSales = new List<CardStats>(),
+                    lastProductsSales = new List<CardStats>();
 
                 foreach (var product in products)
                 {
                     var salesAmount = productSales != null ? productSales.Where(p => p.Product_Id == product.Product_Id).Sum(q => q.Quantity) : 0;
                     var lastSalesAmount = lastProductSales != null ? lastProductSales.Where(p => p.Product_Id == product.Product_Id).Sum(q => q.Quantity) : 0;
 
-                    productsSales.Add(new BestSelling
+                    productsSales.Add(new CardStats
                     {
                         Product_Id = product.Product_Id,
                         Product_Name = product.Product_Name,
                         Sales_Amount = salesAmount
                     });
 
-                    lastProductsSales.Add(new BestSelling
+                    lastProductsSales.Add(new CardStats
                     {
                         Product_Id = product.Product_Id,
                         Product_Name = product.Product_Name,
@@ -108,18 +108,60 @@ namespace PriorityProducts.Controllers
                 var bestSellingProduct = productsSales.OrderByDescending(x => x.Sales_Amount).FirstOrDefault();
                 var bestSellingProductPreStats = lastProductsSales.Where(p => p.Product_Id == bestSellingProduct.Product_Id).FirstOrDefault();
 
-                if (bestSellingProduct.Sales_Amount > bestSellingProductPreStats.Sales_Amount)
-                {
-                    bestSellingProduct.Percentage = bestSellingProductPreStats.Sales_Amount / bestSellingProduct.Sales_Amount;
-                    bestSellingProduct.Is_Progress = true;
-                }
-                else
-                {
-                    bestSellingProduct.Percentage = bestSellingProduct.Sales_Amount / bestSellingProductPreStats.Sales_Amount;
-                    bestSellingProduct.Is_Progress = false;
-                }
+                bestSellingProduct.Percentage = Math.Abs((bestSellingProduct.Sales_Amount / bestSellingProductPreStats.Sales_Amount) - 1) * 100;
+                bestSellingProduct.Is_Progress = bestSellingProduct.Sales_Amount > bestSellingProductPreStats.Sales_Amount
+                    ? true : false;
 
                 return Ok(bestSellingProduct);
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex);
+            }
+        }
+
+        [HttpPost]
+        [Route("newest-product")]
+        public async Task<ActionResult> GetNewestProductAsync()
+        {
+            try
+            {
+                var dateBefore = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7));
+                var dateNow = DateTime.UtcNow;
+                var twoWeeksBefore = DateTime.UtcNow.Subtract(TimeSpan.FromDays(14));
+
+                // Get all products and find the newst one
+                var products = await _productRepository.GetAllAsync();
+                var product = products.OrderByDescending(x => x.Arriving_Date).FirstOrDefault();
+
+                // Get and query products in this week and last week
+                var sales = await _salesRepository.GetAllAsync();
+                var productSales = sales.Where(d => d.Date >= dateBefore && d.Date <= dateNow);
+                var lastProductSales = sales.Where(d => d.Date >= twoWeeksBefore && d.Date < dateBefore);
+
+                var salesAmount = productSales != null ? productSales.Where(p => p.Product_Id == product.Product_Id).Sum(q => q.Quantity) : 0;
+                var lastSalesAmount = lastProductSales != null ? lastProductSales.Where(p => p.Product_Id == product.Product_Id).Sum(q => q.Quantity) : 0;
+
+                var productResult = new CardStats 
+                {
+                    Product_Id = product.Product_Id,
+                    Product_Name = product.Product_Name,
+                    Sales_Amount = salesAmount
+                };
+                    
+                var productPreResult = new CardStats
+                {
+                    Product_Id = product.Product_Id,
+                    Product_Name = product.Product_Name,
+                    Sales_Amount = lastSalesAmount
+                };
+
+                productResult.Percentage = productPreResult.Sales_Amount !=0 ? 
+                    (Math.Abs((productResult.Sales_Amount / productPreResult.Sales_Amount) - 1) * 100) : 0;
+                productResult.Is_Progress = productResult.Sales_Amount > productPreResult.Sales_Amount
+                    ? true : false;
+
+                return Ok(productResult);
             }
             catch (Exception ex)
             {

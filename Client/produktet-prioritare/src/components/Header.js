@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 import { makeStyles, Box, Container, Grid, Tabs, Tab, Typography } from "@material-ui/core";
 import { ArrowDownward, ArrowUpward, TrendingUp, InsertChartOutlined, PieChart} from "@material-ui/icons";
@@ -12,10 +13,25 @@ const useStyles = makeStyles(componentStyles);
 const Header = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState('one');
+  const [cardStats, setCardStats] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const getCardStats = () => {
+    axios
+      .post("https://localhost:5001/service/best-selling-product")
+      .then((response) => {
+        const stats = response.data;
+        setCardStats(stats);
+      });
+  };
+
+  useEffect(() => getCardStats(), []);
+
+  console.log(cardStats);
+
   return (
     <>
       <div className={classes.header}>
@@ -26,10 +42,11 @@ const Header = () => {
         >
           <div>
             <Grid container>
-              <Grid item xl={2} lg={4} xs={12}>
+              <Grid item xl={2} lg={4} xs={12}>              
                 <CardStats
                   subtitle="Best Selling"
-                  title="102"
+                  title={cardStats.product_Name}
+                  amount={cardStats.sales_Amount}
                   icon={InsertChartOutlined}
                   color="bgError"
                   footer={
@@ -37,17 +54,17 @@ const Header = () => {
                       <Box
                         component="span"
                         fontSize=".875rem"
-                        color={theme.palette.success.main}
+                        color={cardStats.is_Progress ? theme.palette.success.main : theme.palette.error.main}
                         marginRight=".5rem"
                         display="flex"
                         alignItems="center"
                       >
                         <Box
-                          component={ArrowUpward}
+                          component={cardStats.is_Progress ? ArrowUpward : ArrowDownward}
                           width="1.5rem!important"
                           height="1.5rem!important"
                         />{" "}
-                        3.48%
+                        {cardStats.percentage == 0 ? "N/A%" : cardStats.percentage + "%"}
                       </Box>
                       <Box component="span" whiteSpace="nowrap">
                         Since last month
@@ -59,7 +76,8 @@ const Header = () => {
               <Grid item xl={2} lg={4} xs={12}>
                 <CardStats
                   subtitle="Newest Product"
-                  title="17"
+                  title="Samsung"
+                  amount="21"
                   icon={PieChart}
                   color="bgWarning"
                   footer={
@@ -89,7 +107,8 @@ const Header = () => {
               <Grid item xl={2} lg={4} xs={12}>
                 <CardStats
                   subtitle="Total Sales"
-                  title="218"
+                  title="All products"
+                  amount="218"
                   icon={TrendingUp}
                   color="bgWarningLight"
                   footer={

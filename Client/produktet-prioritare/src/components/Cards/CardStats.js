@@ -16,7 +16,7 @@ import theme from "../../assets/theme/theme.js";
 
 const useStyles = makeStyles(componentStyles);
 
-function CardStats({ subtitle, title, icon, color, footer }) {
+function CardStats({ subtitle, title, amount, icon, color, footer }) {
   const classes = useStyles();
   return (
     <>
@@ -36,12 +36,22 @@ function CardStats({ subtitle, title, icon, color, footer }) {
               </Box>
               <Box
                 component={Typography}
-                variant="h2"
+                variant="h5"
                 fontWeight="600!important"
                 marginBottom="0!important"
                 marginTop="0!important"
               >
                 {title}
+              </Box>
+              <Box
+                component={Typography}
+                variant="h6"
+                color={theme.palette.gray[600] + "!important"}
+                fontWeight="600!important"
+                marginBottom="0!important"
+                marginTop="0!important"
+              >
+                {amount}
               </Box>
             </Grid>
             <Grid item xs={"auto"}>

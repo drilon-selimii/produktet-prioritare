@@ -2,7 +2,7 @@
 
 namespace PriorityProducts.Models.Entities.Internal
 {
-    public class BestSelling
+    public class CardStats
     {
         public string Product_Id { get; set; }
 
@@ -11,10 +11,5 @@ namespace PriorityProducts.Models.Entities.Internal
         public int Sales_Amount { get; set; }
         public bool Is_Progress { get; set; }
         public double Percentage { get; set; }
-
-        internal object MaxBy()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
