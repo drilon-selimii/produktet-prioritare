@@ -13,6 +13,11 @@ namespace PriorityProducts.Services.External
 
         public DatabaseConnection(IManipulation manipulation)
         {
+            if (Connection !=null && Connection.State == ConnectionState.Open)
+            {
+               Connection.Close();
+            }
+
             _manipulation = manipulation;
 
             var path = _manipulation.GetAllConnections<Models.Entities.Internal.DatabaseConnection>()

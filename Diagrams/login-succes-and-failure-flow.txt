@@ -1,0 +1,33 @@
+@startuml
+title: Login success and failure flow
+
+Client -> Backend: Requests to login
+
+database ApplicationDB
+
+activate Backend
+
+Backend -> ApplicationDB: Requests the database connections 
+Backend <-- ApplicationDB: Responds with the database connections 
+Backend -> Backend: Checks if the login data are\n matching with any connection
+
+note right Backend
+  Succeeded
+end note
+
+Backend --> Client: Logged in
+
+...
+
+Client -> Backend: Requests to login
+Backend -> ApplicationDB: Requests the database connections
+Backend <-- ApplicationDB: Responds with the database connections 
+Backend -> Backend: Checks if the login data are\n matching with any connection
+
+note right Backend
+  Failed
+end note
+
+Backend --> Client: Login Failed
+deactivate Backend
+@enduml

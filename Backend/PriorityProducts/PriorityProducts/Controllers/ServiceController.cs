@@ -168,5 +168,49 @@ namespace PriorityProducts.Controllers
                 return Ok(ex);
             }
         }
+
+        [HttpPost]
+        [Route("todays-total-sales")]
+        public async Task<ActionResult> GetTodaysTotalSalesAsync()
+        {
+            try
+            {
+                var aDayBefore = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1));
+                var today = DateTime.UtcNow;
+                var twoDaysBefore = DateTime.UtcNow.Subtract(TimeSpan.FromDays(2));
+
+                // Get all products and find the newst one
+                var products = await _productRepository.GetAllAsync();
+
+                // Get and query products from today and yesterday
+                var sales = await _salesRepository.GetAllAsync();
+                var todaysSales = sales.Where(d => d.Date > aDayBefore && d.Date <= today);
+                var yesterdaysSales = sales.Where(d => d.Date > twoDaysBefore && d.Date <= aDayBefore);
+
+                var salesAmount = todaysSales != null ? todaysSales.Sum(q => q.Quantity) : 0;
+                var lastSalesAmount = yesterdaysSales != null ? yesterdaysSales.Sum(q => q.Quantity) : 0;
+
+                var todays = new CardStats
+                {
+                    Sales_Amount = salesAmount
+                };
+
+                var yesterdays = new CardStats
+                {
+                    Sales_Amount = lastSalesAmount
+                };
+
+                todays.Percentage = yesterdays.Sales_Amount != 0 ?
+                    (Math.Abs((todays.Sales_Amount / yesterdays.Sales_Amount) - 1) * 100) : 0;
+                todays.Is_Progress = todays.Sales_Amount > yesterdays.Sales_Amount
+                    ? true : false;
+
+                return Ok(todays);
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex);
+            }
+        }
     }
 }

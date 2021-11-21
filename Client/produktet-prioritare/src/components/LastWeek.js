@@ -53,7 +53,7 @@ const LastWeek = () => {
               variant: "h4",
             }}
           ></CardHeader>
-          <TableContainer>
+          <TableContainer style={{maxHeight: "30rem"}}>
             <Box
               component={Table}
               alignItems="center"

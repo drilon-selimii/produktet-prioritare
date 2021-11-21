@@ -42,6 +42,7 @@ namespace Priority.Products.Controllers
                 {
                     return false;
                 }
+                finally { i_vConnection.Close(); }
             }
         }
     }

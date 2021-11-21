@@ -40,11 +40,11 @@ namespace PriorityProducts.Controllers
 
                 var products = await _productRepository.GetAllAsync();
 
-                var productIds = await _manipulation.GetAllProductsIdsFromLastMonth().ToListAsync();
+                var productIds = await _manipulation.GetAllProductsIdsFromLastWeek().ToListAsync();
 
                 var productSales = await _salesRepository.GetAllAsync();
 
-                productSales = productSales.Where(d => d.Date >= dateBefore && d.Date <= dateNow);
+                productSales = productSales.Where(d => d.Date >= dateBefore && d.Date <= dateNow).ToList();
 
                 foreach (var product in products)
                 {
@@ -108,7 +108,7 @@ namespace PriorityProducts.Controllers
 
                 var productSales = await _salesRepository.GetAllAsync();
 
-                productSales = productSales.Where(d => d.Date >= dateBefore && d.Date <= dateNow);
+                productSales = productSales.Where(d => d.Date >= dateBefore && d.Date <= dateNow).ToList(); 
 
                 foreach (var product in products)
                 {

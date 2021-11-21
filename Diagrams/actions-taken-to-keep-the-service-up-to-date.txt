@@ -1,13 +1,15 @@
 @startuml
-title: Periodic actions taken to keep the service\nup to date
+title: Actions taken to keep the service up to date
 
-database ApplicationDB
+participant Client
 participant Backend
+database ApplicationDB
 database StockDB
 
+Client -> Backend: Requests the data to be updated
 activate Backend
 Backend -> StockDB: Requests the needed data
-StockDB --> Backend: Response with the needed data
+StockDB --> Backend: Responds with the needed data
 
 Backend -> Backend: \nExpected actions\nare completed
 Backend --> ApplicationDB: Save the derived data
