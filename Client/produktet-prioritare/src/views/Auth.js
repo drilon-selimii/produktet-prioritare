@@ -1,83 +1,45 @@
 import React from "react";
-// @material-ui/core components
-import {
-  Grid,
-  TextField,
-  Button,
-  Container,
-  CssBaseline,
-  Typography,
-} from "@material-ui/core";
+import { HashRouter as Router, Route, Link } from "react-router-dom";
+import { makeStyles, Box, Tabs, Tab } from "@material-ui/core";
 import componentStyles from "../assets/theme/components/auth-forms";
+import Login from "./Login";
+import Connect from "./Connect";
 
 const Auth = () => {
   const classes = componentStyles();
+  
+  const [value, setValue] = React.useState('one');
+
+    const handleChange = (event, newValue) => {
+      setValue(newValue);
+    };
 
   return (
-    <div className={classes.backg}>
-      <Container component="main" maxWidth="sm">
-        <CssBaseline />
-        <div className={classes.main}>
-          <Typography component="h2" variant="h5">
-            Connect to the database...
-          </Typography>
-          <form className={classes.form}>
-            <Grid container spacing={2} justify="center">
-              <Grid item sm={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="Host"
-                  type="text"
-                  placeholder="Host..."
-                  label="Host"
-                />
-              </Grid>
-              <Grid item sm={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="User"
-                  type="text"
-                  placeholder="User..."
-                  label="User"
-                />
-              </Grid>
-              <Grid item sm={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="Password"
-                  type="password"
-                  placeholder="Password..."
-                  label="Password"
-                />
-              </Grid>
-              <Grid item sm={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="Database"
-                  type="text"
-                  placeholder="Database..."
-                  label="Database"
-                />
-              </Grid>
-              <Grid item sm={12}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submitStyle + " " + classes.buttons}
-                >
-                  Connect
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
+    <div>
+      <Router>
+        <Box className={classes.tabmenu}>
+          <Tabs value={value} onChange={handleChange}>
+            <Tab
+              className={classes.tabs}
+              value="one"
+              label="Login"
+              component={Link}
+              to="/"
+            />
+            <Tab
+              className={classes.tabs}
+              value="two"
+              label="Connect"
+              component={Link}
+              to="/connect"
+            />
+          </Tabs>
+        </Box>
+        <div>
+          <Route path="/" exact component={Login} />
+          <Route path="/connect" exact component={Connect} />
         </div>
-      </Container>
+      </Router>
     </div>
   );
 };

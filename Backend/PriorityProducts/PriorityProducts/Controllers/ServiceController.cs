@@ -28,7 +28,7 @@ namespace PriorityProducts.Controllers
             _salesRepository = salesRepository;
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("get-sorted-last-week")]
         public async Task<ActionResult> GetSortedLastWeeksync()
         {
@@ -46,7 +46,7 @@ namespace PriorityProducts.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("get-sorted-last-month")]
         public async Task<ActionResult> GetSortedLastMonthAsync()
         {
@@ -55,6 +55,24 @@ namespace PriorityProducts.Controllers
                 var unSortedProducts = await _manipulation.GetAllProducts<ThirtyDays>().ToListAsync();
 
                 var sorted = SortingAlgorithms.ThirtyDaysQuickSort(unSortedProducts);
+
+                return Ok(sorted);
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("get-sorted-least-sold-products")]
+        public async Task<ActionResult> GetSortedLeastSoldProductsAsync()
+        {
+            try
+            {
+                var unSortedProducts = await _manipulation.GetAllProducts<LeastSold>().ToListAsync();
+
+                var sorted = unSortedProducts.OrderBy(x => x.Sales_Amount);
 
                 return Ok(sorted);
             }
@@ -79,8 +97,8 @@ namespace PriorityProducts.Controllers
                 var sales = await _salesRepository.GetAllAsync();
 
                 // Query products in this month and last month
-                var productSales = sales.Where(d => d.Date >= dateBefore && d.Date <= dateNow);
-                var lastProductSales = sales.Where(d => d.Date >= twoMonthsBefore && d.Date < dateBefore);
+                var productSales = sales.Where(d => d.Date >= dateBefore && d.Date <= dateNow).ToList();
+                var lastProductSales = sales.Where(d => d.Date >= twoMonthsBefore && d.Date < dateBefore).ToList();
 
                 List<CardStats> productsSales = new List<CardStats>(),
                     lastProductsSales = new List<CardStats>();
@@ -90,14 +108,14 @@ namespace PriorityProducts.Controllers
                     var salesAmount = productSales != null ? productSales.Where(p => p.Product_Id == product.Product_Id).Sum(q => q.Quantity) : 0;
                     var lastSalesAmount = lastProductSales != null ? lastProductSales.Where(p => p.Product_Id == product.Product_Id).Sum(q => q.Quantity) : 0;
 
-                    productsSales.Add(new CardStats
+                    productsSales.Add(new CardStats()
                     {
                         Product_Id = product.Product_Id,
                         Product_Name = product.Product_Name,
                         Sales_Amount = salesAmount
                     });
 
-                    lastProductsSales.Add(new CardStats
+                    lastProductsSales.Add(new CardStats()
                     {
                         Product_Id = product.Product_Id,
                         Product_Name = product.Product_Name,
@@ -136,20 +154,20 @@ namespace PriorityProducts.Controllers
 
                 // Get and query products in this week and last week
                 var sales = await _salesRepository.GetAllAsync();
-                var productSales = sales.Where(d => d.Date >= dateBefore && d.Date <= dateNow);
-                var lastProductSales = sales.Where(d => d.Date >= twoWeeksBefore && d.Date < dateBefore);
+                var productSales = sales.Where(d => d.Date >= dateBefore && d.Date <= dateNow).ToList();
+                var lastProductSales = sales.Where(d => d.Date >= twoWeeksBefore && d.Date < dateBefore).ToList();
 
                 var salesAmount = productSales != null ? productSales.Where(p => p.Product_Id == product.Product_Id).Sum(q => q.Quantity) : 0;
                 var lastSalesAmount = lastProductSales != null ? lastProductSales.Where(p => p.Product_Id == product.Product_Id).Sum(q => q.Quantity) : 0;
 
-                var productResult = new CardStats 
+                var productResult = new CardStats()
                 {
                     Product_Id = product.Product_Id,
                     Product_Name = product.Product_Name,
                     Sales_Amount = salesAmount
                 };
                     
-                var productPreResult = new CardStats
+                var productPreResult = new CardStats()
                 {
                     Product_Id = product.Product_Id,
                     Product_Name = product.Product_Name,
@@ -175,27 +193,27 @@ namespace PriorityProducts.Controllers
         {
             try
             {
-                var aDayBefore = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1));
-                var today = DateTime.UtcNow;
-                var twoDaysBefore = DateTime.UtcNow.Subtract(TimeSpan.FromDays(2));
+                var dateBefore = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7));
+                var dateNow = DateTime.UtcNow;
+                var twoWeeksBefore = DateTime.UtcNow.Subtract(TimeSpan.FromDays(14));
 
                 // Get all products and find the newst one
                 var products = await _productRepository.GetAllAsync();
 
                 // Get and query products from today and yesterday
                 var sales = await _salesRepository.GetAllAsync();
-                var todaysSales = sales.Where(d => d.Date > aDayBefore && d.Date <= today);
-                var yesterdaysSales = sales.Where(d => d.Date > twoDaysBefore && d.Date <= aDayBefore);
+                var todaysSales = sales.Where(d => d.Date > dateBefore && d.Date <= dateNow).ToList();
+                var yesterdaysSales = sales.Where(d => d.Date >= twoWeeksBefore && d.Date <= dateBefore).ToList();
 
                 var salesAmount = todaysSales != null ? todaysSales.Sum(q => q.Quantity) : 0;
                 var lastSalesAmount = yesterdaysSales != null ? yesterdaysSales.Sum(q => q.Quantity) : 0;
 
-                var todays = new CardStats
+                var todays = new CardStats()
                 {
                     Sales_Amount = salesAmount
                 };
 
-                var yesterdays = new CardStats
+                var yesterdays = new CardStats()
                 {
                     Sales_Amount = lastSalesAmount
                 };

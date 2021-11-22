@@ -18,5 +18,8 @@ namespace PriorityProducts.Services.Internal.Interfaces
 
         IQueryable<ProductIds> GetAllProductsIdsFromLastWeek();
         IQueryable<ProductIds> GetAllProductsIdsFromLastMonth();
+
+        IQueryable<ProductIds> GetAllProductsIdsFromLastSold();
+
     }
 }

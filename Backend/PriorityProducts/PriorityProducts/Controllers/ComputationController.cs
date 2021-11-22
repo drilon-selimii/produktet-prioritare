@@ -108,7 +108,7 @@ namespace PriorityProducts.Controllers
 
                 var productSales = await _salesRepository.GetAllAsync();
 
-                productSales = productSales.Where(d => d.Date >= dateBefore && d.Date <= dateNow).ToList(); 
+                productSales = productSales.Where(d => d.Date >= dateBefore && d.Date <= dateNow).ToList();
 
                 foreach (var product in products)
                 {
@@ -148,6 +148,70 @@ namespace PriorityProducts.Controllers
 
                         _manipulation.Add(priorityProductsToInsert);
                         await _manipulation.SaveChangesAsync();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost]
+        [Route("save-least-sold-products")]
+        public async Task GetAndSaveleastSoldProductsAsync()
+        {
+            try
+            {
+                var dateBefore = DateTime.UtcNow.Subtract(TimeSpan.FromDays(30));
+                var dateNow = DateTime.UtcNow;
+
+                var products = await _productRepository.GetAllAsync();
+
+                var productIds = await _manipulation.GetAllProductsIdsFromLastSold().ToListAsync();
+
+                var productSales = await _salesRepository.GetAllAsync();
+
+                productSales = productSales.Where(d => d.Date >= dateBefore && d.Date <= dateNow).ToList();
+
+                foreach (var product in products)
+                {
+                    var salesAmount = productSales != null ? productSales.Where(p => p.Product_Id == product.Product_Id).Sum(q => q.Quantity) : 0;
+
+                    if (salesAmount <= 5)
+                    {
+
+                        if (productIds.Any(p => p.Product_Id == product.Product_Id))
+                        {
+                            var leastSoldProductsToUpdate = new LeastSold
+                            {
+                                Product_Id = product.Product_Id,
+                                Product_Name = product.Product_Name,
+                                Last_Update = product.Last_Update,
+                                Remaining_Quantity = product.Remaining_Quantity,
+                                Product_Price = product.Product_Price,
+                                Sales_Amount = salesAmount,
+                            };
+
+                            _manipulation.Update(leastSoldProductsToUpdate);
+                            await _manipulation.SaveChangesAsync();
+                        }
+
+                        else
+                        {
+                            var leastSoldProductsToInsert = new LeastSold
+                            {
+                                Product_Id = product.Product_Id,
+                                Product_Name = product.Product_Name,
+                                Last_Update = product.Last_Update,
+                                Remaining_Quantity = product.Remaining_Quantity,
+                                Product_Price = product.Product_Price,
+                                Sales_Amount = salesAmount,
+                            };
+
+                            _manipulation.Add(leastSoldProductsToInsert);
+                            await _manipulation.SaveChangesAsync();
+                        }
                     }
                 }
             }

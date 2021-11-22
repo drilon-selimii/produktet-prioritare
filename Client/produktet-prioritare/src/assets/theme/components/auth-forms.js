@@ -12,11 +12,28 @@ const componentStyles = makeStyles(() => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    marginTop: "2.5rem",
     position: "relative",
     padding: theme.spacing(6),
     borderRadius: "10px",
     opacity: "0.85",  
     backgroundColor:  theme.palette.gray[100]
+  },
+  tabmenu: {
+    position: "absolute",
+    left: "50%",
+    transform: "translate(-50%,0)",
+    zIndex: 3,
+    fontWeight: 600
+  },
+  typography: 
+  {
+    fontWeight: 700,
+    marginLeft: "1rem"
+  },  
+  tabs: 
+  {
+    fontWeight: 700
   },
   form: {
     width: "100%",

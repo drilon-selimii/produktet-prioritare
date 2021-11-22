@@ -23,7 +23,11 @@ const LeastSold = () => {
   const [repo, setRepo] = useState([]);
 
   const getRepo = () => {
-    axios.post("https://localhost:5001/test/sort").then((response) => {
+    axios.post(
+      "https://localhost:5001/computation/save-least-sold-products"
+    );
+
+    axios.get("https://localhost:5001/service/get-sorted-least-sold-products").then((response) => {
       const myRepo = response.data;
       setRepo(myRepo);
     });
@@ -110,15 +114,7 @@ const LeastSold = () => {
                         classes.tableCellRoot + " " + classes.tableCellRootHead,
                     }}
                   >
-                    Sales Amount
-                  </TableCell>
-                  <TableCell
-                    classes={{
-                      root:
-                        classes.tableCellRoot + " " + classes.tableCellRootHead,
-                    }}
-                  >
-                    Coefficient
+                    Last Month Sales Amount
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -146,9 +142,6 @@ const LeastSold = () => {
                       </TableCell>
                       <TableCell classes={{ root: classes.tableCellRoot }}>
                         {data.sales_Amount}
-                      </TableCell>
-                      <TableCell classes={{ root: classes.tableCellRoot }}>
-                        {data.coefficient}
                       </TableCell>
                     </TableRow>
                   );

@@ -27,7 +27,7 @@ const LastWeek = () => {
       "https://localhost:5001/computation/save-last-week-priority-products"
     );
     axios
-      .post("https://localhost:5001/service/get-sorted-last-week")
+      .get("https://localhost:5001/service/get-sorted-last-week")
       .then((response) => {
         const myRepo = response.data;
         setRepo(myRepo);

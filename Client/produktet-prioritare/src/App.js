@@ -20,7 +20,7 @@ const App = () => {
 
     return ( 
       <div > {
-        isConnected === true ? < Home /> : < Auth />
+        isConnected === true ? < Home /> : <Auth />
       } </div>);
     };
     export default App;

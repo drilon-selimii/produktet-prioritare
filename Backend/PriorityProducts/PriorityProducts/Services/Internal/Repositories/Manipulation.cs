@@ -49,5 +49,10 @@ namespace PriorityProducts.Services.Internal.Repositories
         {
             return _context.Set<ThirtyDays>().Select(p => new ProductIds { Product_Id = p.Product_Id });
         }
+
+        public IQueryable<ProductIds> GetAllProductsIdsFromLastSold()
+        {
+            return _context.Set<LeastSold>().Select(p => new ProductIds { Product_Id = p.Product_Id });
+        }
     }
 }

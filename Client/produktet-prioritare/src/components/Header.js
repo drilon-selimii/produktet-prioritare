@@ -21,33 +21,28 @@ const Header = () => {
     setValue(newValue);
   };
 
-  const getBestSellingProduct = () => {
+  const getDataStats = () => {
     axios
       .post("https://localhost:5001/service/best-selling-product")
       .then((response) => {
         setBestSelling(response.data);
-      });   
-  };
-
-  const getNewestProduct = () => {
+      });  
+      
       axios
       .post("https://localhost:5001/service/newest-product")
       .then((response) => {
         setNewestProduct(response.data);
-      });      
-  };
+      });  
 
-  const getTotalSales = () => {
-    axios
+      axios
     .post("https://localhost:5001/service/todays-total-sales")
     .then((response) => {
       setTotalSales(response.data);
     });      
-};
+  };
 
-  useEffect(() => {getBestSellingProduct(); getNewestProduct(); getTotalSales();}, [getBestSellingProduct, getNewestProduct, getTotalSales]);
+  useEffect(() => getDataStats() , []);
 
-console.log(totalSales);
   return (
     <>
       <div className={classes.header}>
@@ -145,7 +140,7 @@ console.log(totalSales);
                         {totalSales.percentage == 0 ? "N/A%" : totalSales.percentage + "%"}
                       </Box>
                       <Box component="span" whiteSpace="nowrap">
-                        Since yesterday
+                        Since last week
                       </Box>
                     </>
                   }

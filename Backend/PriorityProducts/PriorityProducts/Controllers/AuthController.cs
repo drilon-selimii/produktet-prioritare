@@ -35,14 +35,14 @@ namespace Priority.Products.Controllers
             {
                 try
                 {
-                    i_vConnection.Open();
+                    await i_vConnection.OpenAsync();
                     return true;
                 }
                 catch (SqlException)
                 {
                     return false;
                 }
-                finally { i_vConnection.Close(); }
+                finally {await i_vConnection.CloseAsync(); }
             }
         }
     }

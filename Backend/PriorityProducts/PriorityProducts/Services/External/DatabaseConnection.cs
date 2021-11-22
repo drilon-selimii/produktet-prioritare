@@ -28,7 +28,7 @@ namespace PriorityProducts.Services.External
                 username = path.User,
                 password = path.Password;
 
-            string dbPath = $"Server={server};Database={database};Uid={username};Pwd={password};MultipleActiveResultSets=True";
+            string dbPath = $"Server={server};Database={database};Uid={username};Pwd={password};MultipleActiveResultSets=True;Integrated Security=True";
 
             Connection = new SqlConnection(dbPath);
         }

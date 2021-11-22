@@ -27,7 +27,7 @@ const LastMonth = () => {
       "https://localhost:5001/computation/save-last-month-priority-products"
     );
     axios
-      .post("https://localhost:5001/service/get-sorted-last-month")
+      .get("https://localhost:5001/service/get-sorted-last-month")
       .then((response) => {
         const myRepo = response.data;
         setRepo(myRepo);

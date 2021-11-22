@@ -9,6 +9,7 @@ namespace PriorityProducts.Models
         { }
         public DbSet<SevenDays> SevenDays { get; set; }
         public DbSet<ThirtyDays> ThirtyDays { get; set; }
+        public DbSet<LeastSold> LeastSoldProducts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
