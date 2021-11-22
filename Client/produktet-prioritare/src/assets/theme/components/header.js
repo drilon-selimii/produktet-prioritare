@@ -11,6 +11,12 @@ const componentStyles = () => ({
       paddingTop: "10rem",
     },
   },
+  ddmenu: {
+    position: "absolute",
+    top: "2rem",
+    right: "2rem",
+    zIndex: 2,
+  },
   tabmenu: {
     marginTop: "1.5rem",
     marginLeft: "2.5rem",

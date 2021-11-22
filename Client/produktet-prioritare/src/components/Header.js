@@ -3,7 +3,8 @@ import axios from "axios";
 
 import { makeStyles, Box, Container, Grid, Tabs, Tab, Typography } from "@material-ui/core";
 import { ArrowDownward, ArrowUpward, TrendingUp, InsertChartOutlined, PieChart} from "@material-ui/icons";
-// core components
+
+import StyledMenu from "./Menus/StyledMenu.js"
 import CardStats from "./Cards/CardStats.js";
 import componentStyles from "../assets/theme/components/header.js";
 import theme from "../assets/theme/theme.js";
@@ -45,6 +46,9 @@ const Header = () => {
 
   return (
     <>
+    <div className={classes.ddmenu}> 
+    <StyledMenu/>
+    </div>
       <div className={classes.header}>
         <Container
           maxWidth={false}
