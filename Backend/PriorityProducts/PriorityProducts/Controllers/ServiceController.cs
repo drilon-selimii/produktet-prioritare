@@ -82,7 +82,7 @@ namespace PriorityProducts.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("best-selling-product")]
         public async Task<ActionResult> GetBestSellingProductAsync()
         {
@@ -126,7 +126,10 @@ namespace PriorityProducts.Controllers
                 var bestSellingProduct = productsSales.OrderByDescending(x => x.Sales_Amount).FirstOrDefault();
                 var bestSellingProductPreStats = lastProductsSales.Where(p => p.Product_Id == bestSellingProduct.Product_Id).FirstOrDefault();
 
-                bestSellingProduct.Percentage = Math.Abs((bestSellingProduct.Sales_Amount / bestSellingProductPreStats.Sales_Amount) - 1) * 100;
+                bestSellingProduct.Percentage = bestSellingProductPreStats.Sales_Amount != 0 ?
+                    Math.Abs((bestSellingProduct.Sales_Amount / bestSellingProductPreStats.Sales_Amount) - 1) * 100 : 0;
+                bestSellingProduct.Percentage = Math.Round(bestSellingProduct.Percentage, 2);
+
                 bestSellingProduct.Is_Progress = bestSellingProduct.Sales_Amount > bestSellingProductPreStats.Sales_Amount
                     ? true : false;
 
@@ -138,7 +141,7 @@ namespace PriorityProducts.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("newest-product")]
         public async Task<ActionResult> GetNewestProductAsync()
         {
@@ -176,6 +179,8 @@ namespace PriorityProducts.Controllers
 
                 productResult.Percentage = productPreResult.Sales_Amount !=0 ? 
                     (Math.Abs((productResult.Sales_Amount / productPreResult.Sales_Amount) - 1) * 100) : 0;
+                productResult.Percentage = Math.Round(productResult.Percentage, 2);
+
                 productResult.Is_Progress = productResult.Sales_Amount > productPreResult.Sales_Amount
                     ? true : false;
 
@@ -187,9 +192,9 @@ namespace PriorityProducts.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("todays-total-sales")]
-        public async Task<ActionResult> GetTodaysTotalSalesAsync()
+        [HttpGet]
+        [Route("this-week-total-sales")]
+        public async Task<ActionResult> GetThisWeekTotalSalesAsync()
         {
             try
             {
@@ -208,22 +213,24 @@ namespace PriorityProducts.Controllers
                 var salesAmount = todaysSales != null ? todaysSales.Sum(q => q.Quantity) : 0;
                 var lastSalesAmount = yesterdaysSales != null ? yesterdaysSales.Sum(q => q.Quantity) : 0;
 
-                var todays = new CardStats()
+                var thisWeek = new CardStats()
                 {
                     Sales_Amount = salesAmount
                 };
 
-                var yesterdays = new CardStats()
+                var lastWeek = new CardStats()
                 {
                     Sales_Amount = lastSalesAmount
                 };
 
-                todays.Percentage = yesterdays.Sales_Amount != 0 ?
-                    (Math.Abs((todays.Sales_Amount / yesterdays.Sales_Amount) - 1) * 100) : 0;
-                todays.Is_Progress = todays.Sales_Amount > yesterdays.Sales_Amount
+                thisWeek.Percentage = lastWeek.Sales_Amount != 0 ?
+                    (Math.Abs((thisWeek.Sales_Amount / lastWeek.Sales_Amount) - 1) * 100) : 0;
+                thisWeek.Percentage = Math.Round(thisWeek.Percentage, 2);
+
+                thisWeek.Is_Progress = thisWeek.Sales_Amount > lastWeek.Sales_Amount
                     ? true : false;
 
-                return Ok(todays);
+                return Ok(thisWeek);
             }
             catch (Exception ex)
             {

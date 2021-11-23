@@ -24,19 +24,19 @@ const Header = () => {
 
   const getDataStats = () => {
     axios
-      .post("https://localhost:5001/service/best-selling-product")
+      .get("https://localhost:5001/service/best-selling-product")
       .then((response) => {
         setBestSelling(response.data);
       });  
       
       axios
-      .post("https://localhost:5001/service/newest-product")
+      .get("https://localhost:5001/service/newest-product")
       .then((response) => {
         setNewestProduct(response.data);
       });  
 
       axios
-    .post("https://localhost:5001/service/todays-total-sales")
+    .get("https://localhost:5001/service/this-week-total-sales")
     .then((response) => {
       setTotalSales(response.data);
     });      

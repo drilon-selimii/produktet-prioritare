@@ -36,7 +36,7 @@ function CardStats({ subtitle, title, amount, icon, color, footer }) {
               </Box>
               <Box
                 component={Typography}
-                variant="h5"
+                variant="h6"
                 fontWeight="600!important"
                 marginBottom="0!important"
                 marginTop="0!important"

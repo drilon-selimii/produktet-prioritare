@@ -8,8 +8,8 @@ namespace PriorityProducts.Models.Entities.Internal
 
         public string Product_Name { get; set; }
 
-        public int Sales_Amount { get; set; }
+        public decimal Sales_Amount { get; set; }
         public bool Is_Progress { get; set; }
-        public double Percentage { get; set; }
+        public decimal Percentage { get; set; }
     }
 }
